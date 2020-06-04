@@ -1,1 +1,54 @@
-12
+// ==UserScript==
+// @name         网页登录保持2.0
+// @namespace    http://tampermonkey.net/
+// @version      0.1
+// @description  try to take over the world!
+// @author       MT
+// @match        https://github.com/*
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    // Your code here...
+    var refreshTime = 3;//刷新时间：分钟
+    var heartBeatTime = 5;//心跳时间：秒
+    var optAction = true;
+    var body = document.getElementsByTagName("body")[0];
+    var autoTime;
+
+    function setFlag(){
+        optAction = true;
+        console.log("body");
+        clearInterval(autoTime);
+        autoTime = setInterval(function(){
+            optAction = false;
+        },60000 * refreshTime)
+    }
+    function triggerTopFunc(){
+        var topBody = window.top.document.getElementsByTagName("body")[0];
+        var e = document.createEvent("MouseEvents");
+        e.initEvent("click", true, true);
+        topBody.dispatchEvent(e);
+    }
+
+    if(window.top == window.self){//顶部页面逻辑
+        autoTime = setInterval(function(){
+            optAction = false;
+        },60000 * refreshTime);
+        body.addEventListener('click',setFlag,true);
+        body.addEventListener('mousemove',setFlag,true);
+        body.addEventListener('keydown',setFlag,true);
+        setInterval(function(){
+            if(!optAction){
+                console.log("刷新页面");
+                window.location.reload(true);
+            }
+        },1000 * heartBeatTime);
+    }else{//子页面逻辑
+        body.addEventListener('click',triggerTopFunc,true);
+        body.addEventListener('mousemove',triggerTopFunc,true);
+        body.addEventListener('keydown',triggerTopFunc,true);
+    }
+})();
