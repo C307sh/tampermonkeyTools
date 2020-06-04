@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         网页登录保持2.0
+// @name         网页登录保持
 // @namespace    http://tampermonkey.net/
 // @version      0.1
-// @description  try to take over the world!
+// @description  每隔固定时间自动刷新页面
 // @author       MT
 // @match        https://github.com/*
 // @grant        none
